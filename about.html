@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family:'Segoe UI', sans-serif;
+      background: linear-gradient(120deg,#a1c4fd,#c2e9fb); /* SAME AS INDEX PAGE */
+      color:#333;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+    header {
+      background:rgba(0,0,0,0.8);
+      padding:15px 20px;
+      color:white;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+    header h1 { font-size:1.5rem; font-weight:bold; }
+    nav a {
+      color:white;
+      text-decoration:none;
+      margin-left:20px;
+      font-weight:500;
+    }
+    nav a:hover { color:#ffd700; }
+    footer {
+      background:rgba(0,0,0,0.8);
+      color:white;
+      text-align:center;
+      padding:10px;
+      font-size:0.9rem;
+      margin-top:auto;
+    }
+    main {
+      flex:1;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:20px;
+    }
+    /* About box style */
+    .about-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      padding: 25px;
+      max-width: 700px;
+      width: 100%;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .about-container h2 {
+      margin-bottom: 15px;
+    }
+    .about-container p {
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Type Speed Test</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="type-testing.html">Type Test</a>
+      <a href="profile.html">Profile</a>
+      <a href="about.html" class="active">About</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="about-container">
+      <h2>About This App</h2>
+      <p>
+        This web application is designed to provide a smooth and interactive typing experience 
+        along with profile management features. Our goal is to create a modern, beautiful, and 
+        responsive design that works on all devices.
+      </p>
+      <p>
+        The application uses HTML, CSS, and JavaScript for a fast and responsive interface, 
+        with animations and glassmorphism for a premium look and feel.
+      </p>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Pon Abinaya. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
