@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family:'Segoe UI', sans-serif;
+      background: linear-gradient(120deg,#a1c4fd,#c2e9fb);
+      color:#333;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+    header { background:rgba(0,0,0,0.8); padding:15px 20px; color:white; display:flex; justify-content:space-between; align-items:center; }
+    header h1 { font-size:1.5rem; font-weight:bold; }
+    header nav a { color:white; text-decoration:none; margin-left:20px; font-weight:500; }
+    header nav a:hover { color:#ffd700; }
+    footer { background:rgba(0,0,0,0.8); color:white; text-align:center; padding:10px; font-size:0.9rem; margin-top:auto; }
+    main { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px; }
+    .form-container, .card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      padding: 20px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .form-container h2 { margin-bottom: 15px; }
+    .form-container input,
+    .form-container textarea,
+    .form-container button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      font-size: 1em;
+      border: 2px solid #333;
+      outline: none;
+    }
+    .form-container button {
+      background: #3b82f6;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+    .form-container button:hover { background: #2563eb; }
+    .success-message {
+      margin-top: 10px;
+      color: #4caf50;
+      font-weight: bold;
+      display: none;
+    }
+    .card { margin-top: 20px; text-align: center; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Typing Speed Test</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="type-testing.html">Type Test</a>
+      <a href="profile.html" class="active">Profile</a>
+      <a href="about.html">About</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="form-container">
+      <h2>Register</h2>
+      <input type="text" id="name" placeholder="Full Name" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <textarea id="bio" placeholder="Short Bio"></textarea>
+      <button id="registerBtn">Register</button>
+      <p class="success-message" id="successMsg">✅ Registered Successfully!</p>
+    </div>
+
+    <div id="profileCards"></div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Pon Abinaya. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const registerBtn = document.getElementById("registerBtn");
+    const profileCards = document.getElementById("profileCards");
+    const successMsg = document.getElementById("successMsg");
+
+    // Load stored profiles on page load
+    window.addEventListener("load", () => {
+      const storedProfiles = JSON.parse(localStorage.getItem("profiles")) || [];
+      storedProfiles.forEach(p => addCard(p.name, p.email, p.bio));
+    });
+
+    registerBtn.addEventListener("click", () => {
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const bio = document.getElementById("bio").value.trim();
+
+      if (!name || !email) {
+        alert("Please fill in all required fields");
+        return;
+      }
+
+      // Add to UI
+      addCard(name, email, bio);
+
+      // Save to Local Storage
+      const profiles = JSON.parse(localStorage.getItem("profiles")) || [];
+      profiles.push({ name, email, bio });
+      localStorage.setItem("profiles", JSON.stringify(profiles));
+
+      // Clear form
+      document.getElementById("name").value = "";
+      document.getElementById("email").value = "";
+      document.getElementById("bio").value = "";
+
+      // Show success message
+      successMsg.style.display = "block";
+      setTimeout(() => { successMsg.style.display = "none"; }, 2000);
+    });
+
+    function addCard(name, email, bio) {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <h3>${name}</h3>
+        <p><strong>Email:</strong> ${email}</p>
+        <p>${bio || ""}</p>
+      `;
+      profileCards.appendChild(card);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Typing Speed Test</title>
+<link rel="stylesheet" href="style.css">
+<style>
+* {margin:0; padding:0; box-sizing:border-box;}
+body {
+    font-family:'Segoe UI',sans-serif;
+    background: linear-gradient(120deg,#a1c4fd,#c2e9fb);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+
+/* ===== HEADER ===== */
+header { background:rgba(0,0,0,0.8); padding:15px 20px; color:white; display:flex; justify-content:space-between; align-items:center; animation:fadeInDown 0.6s ease-in-out; }
+header h1 { font-size:1.5rem; font-weight:bold; }
+header nav a { color:white; text-decoration:none; margin-left:20px; font-weight:500; transition:color 0.3s ease, transform 0.3s ease; }
+header nav a:hover { color:#ffd700; transform:scale(1.05); }
+header nav a.active { color:#ffd700; }
+
+/* ===== FOOTER ===== */
+footer { background:rgba(0,0,0,0.8); color:white; text-align:center; padding:10px; font-size:0.9rem; margin-top:auto; animation:fadeInUp 0.6s ease-in-out; }
+
+.container {
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+/* ===== CARD ===== */
+.card {
+    background: rgba(255,255,255,0.95);
+    padding: 40px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 600px;
+    text-align:center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+.card h2 { margin-bottom: 15px; }
+.card p { margin-bottom: 20px; font-size:1rem; }
+
+.buttons {
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    margin-bottom:20px;
+    flex-wrap:wrap;
+}
+
+button {
+    padding:12px 28px;
+    font-size:1rem;
+    font-weight:bold;
+    border-radius:10px;
+    border:none;
+    cursor:pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover { transform:scale(1.05); box-shadow:0 8px 15px rgba(0,0,0,0.2); }
+
+.easy { background:#4caf50; color:white; }
+.medium { background:#facc15; color:#92400e; }
+.hard { background:#f87171; color:#7f1d1d; }
+.restart { background:#3b82f6; color:white; display:none; margin-top:15px; }
+
+#typing-area {
+    width:100%; 
+    padding:12px;
+    font-size:1.1rem;
+    border-radius:10px;
+    border:2px solid #333;
+    outline:none;
+    margin-bottom:20px;
+}
+
+#typing-area:focus { border-color:#3b82f6; }
+
+.results {
+    display:flex;
+    justify-content:space-around;
+    font-weight:bold;
+    margin-top:15px;
+    font-size:1rem;
+}
+
+@keyframes fadeInDown { from {opacity:0; transform:translateY(-20px);} to {opacity:1; transform:translateY(0);} }
+@keyframes fadeInUp { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
+
+@media(max-width:480px){
+    .results { flex-direction:column; gap:10px; }
+    .buttons { flex-direction:column; gap:10px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+<h1>Typing Speed Test</h1>
+<nav>
+<a href="index.html">Home</a>
+<a href="typing-test.html" class="active">Type Testing</a>
+<a href="profile.html">Profile</a>
+<a href="about.html">About</a>
+</nav>
+</header>
+
+<!-- MAIN CONTENT -->
+<main class="container">
+<div class="card">
+    <h2>Typing Speed Test</h2>
+    <p>Select a difficulty and start typing!</p>
+    
+    <div class="buttons">
+        <button class="easy" onclick="startTest('easy')">Easy</button>
+        <button class="medium" onclick="startTest('medium')">Medium</button>
+        <button class="hard" onclick="startTest('hard')">Hard</button>
+    </div>
+    
+    <input type="text" id="typing-area" placeholder="Start typing here..." disabled>
+    
+    <div class="results">
+        <span>Time: <span id="time">0</span>s</span>
+        <span>Speed: <span id="speed">0</span> WPM</span>
+        <span>Accuracy: <span id="accuracy">0</span>%</span>
+    </div>
+    
+    <button class="restart" id="restart-btn" onclick="restartTest()">Restart</button>
+</div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+<p>&copy; 2025 Typing Speed Test. All rights reserved.</p>
+</footer>
+
+<script>
+const easyWords = ["cat","dog","sun","tree","book","pen","hat","cup","ball","fish"];
+const mediumWords = ["computer","keyboard","monitor","javascript","typing","program","function","variable","browser","document"];
+const hardWords = ["optimization","synchronization","asynchronous","polymorphism","encapsulation","inheritance","algorithm","complexity","implementation","development"];
+
+let words=[], startTime, timerInterval;
+let totalChars=0, correctChars=0;
+
+function startTest(level){
+    const input = document.getElementById('typing-area');
+    input.value='';
+    input.disabled=false;
+    input.focus();
+    
+    document.getElementById('restart-btn').style.display='inline-block';
+    document.getElementById('time').textContent=0;
+    document.getElementById('speed').textContent=0;
+    document.getElementById('accuracy').textContent=0;
+
+    if(level==='easy'){ words = easyWords; }
+    else if(level==='medium'){ words = mediumWords; }
+    else{ words = hardWords; }
+
+    totalChars = words.join(' ').length;
+    correctChars=0;
+    
+    input.placeholder = words.join(' ');
+
+    startTime = new Date().getTime();
+    clearInterval(timerInterval);
+    timerInterval = setInterval(updateTime, 1000);
+}
+
+function updateTime(){
+    let currentTime = new Date().getTime();
+    let elapsed = Math.floor((currentTime - startTime)/1000);
+    document.getElementById('time').textContent = elapsed;
+
+    let typed = document.getElementById('typing-area').value;
+    let correct = 0;
+    for(let i=0;i<typed.length;i++){
+        if(typed[i] === words.join(' ')[i]) correct++;
+    }
+    correctChars = correct;
+
+    let wpm = Math.round((typed.length/5)/(elapsed/60)||0);
+    let acc = Math.round((correctChars/typed.length)*100||0);
+
+    document.getElementById('speed').textContent = wpm;
+    document.getElementById('accuracy').textContent = acc;
+
+    if(typed === words.join(' ')){
+        clearInterval(timerInterval);
+        alert(`Test Complete! WPM: ${wpm}, Accuracy: ${acc}%`);
+        document.getElementById('typing-area').disabled=true;
+    }
+}
+
+function restartTest(){
+    clearInterval(timerInterval);
+    document.getElementById('typing-area').value='';
+    document.getElementById('typing-area').disabled=true;
+    document.getElementById('typing-area').placeholder="Start typing here...";
+    document.getElementById('time').textContent=0;
+    document.getElementById('speed').textContent=0;
+    document.getElementById('accuracy').textContent=0;
+    document.getElementById('restart-btn').style.display='none';
+}
+</script>
+
+</body>
+</html>
